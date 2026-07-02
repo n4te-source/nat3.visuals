@@ -3,552 +3,588 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>nat3.Visuals — Designer &amp; Developer</title>
+<title>nat3_Visuals — Designer & Developer</title>
+<meta name="description" content="nat3_Visuals — a designer-developer based in Nigeria who designs in Figma and ships in code. Open to local and international freelance work.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg: #0b0e14;
-    --bg-panel: #10141c;
-    --bg-panel-2: #141925;
-    --line: #1f2530;
-    --line-soft: #181d27;
-    --text: #d8dde6;
-    --text-dim: #6b7385;
-    --text-faint: #454b5a;
-    --keyword: #c792ea;
-    --string: #4fd6be;
-    --func: #7aa2f7;
-    --number: #f6a560;
-    --comment: #4b5563;
-    --danger: #f17b7b;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'Inter', sans-serif;
-  }
+:root{
+  --bg:#0b0e14; --bg-panel:#10141c; --bg-panel-2:#141925;
+  --line:#1f2530; --line-soft:#181d27;
+  --text:#d8dde6; --text-dim:#6b7385; --text-faint:#353c4a;
+  --keyword:#c792ea; --string:#4fd6be; --func:#7aa2f7;
+  --number:#f6a560; --comment:#4b5563; --danger:#f17b7b;
+  --mono:'IBM Plex Mono',monospace; --sans:'Inter',sans-serif;
+  --gutter-w:46px; --tab-h:46px; --bar-h:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;padding-bottom:var(--bar-h);}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--func);color:#0b0e14;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--func);outline-offset:3px;border-radius:2px;}
+img{display:block;max-width:100%;}
 
-  *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
-  body{
-    margin:0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    line-height: 1.6;
-    padding-bottom: 44px; /* room for status bar */
-  }
-  a{ color: inherit; text-decoration:none; }
-  ::selection{ background: var(--func); color: #0b0e14; }
-  a:focus-visible, button:focus-visible{
-    outline: 2px solid var(--func);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
+/* ── Tab bar ── */
+.tabbar{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;
+  background:var(--bg-panel);border-bottom:1px solid var(--line);
+  padding:0 12px;height:var(--tab-h);overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabbar::-webkit-scrollbar{display:none;}
+.tabbar-dots{display:flex;gap:6px;margin-right:16px;flex:none;}
+.tabbar-dots span{width:10px;height:10px;border-radius:50%;display:block;}
+.dot-r{background:#f17b7b;} .dot-y{background:#f6c177;} .dot-g{background:#4fd6be;}
+.tabs{display:flex;gap:0;flex:none;}
+.tab{
+  font-family:var(--mono);font-size:12px;color:var(--text-dim);
+  padding:10px 13px;border-right:1px solid var(--line-soft);
+  white-space:nowrap;border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s;
+}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--string);border-bottom-color:var(--string);}
 
-  /* ---------- Tab bar ---------- */
-  .tabbar{
-    position: sticky;
-    top:0;
-    z-index: 50;
-    display:flex;
-    align-items:center;
-    background: var(--bg-panel);
-    border-bottom: 1px solid var(--line);
-    padding: 0 16px;
-    height: 46px;
-    overflow-x:auto;
-  }
-  .tabbar-dots{ display:flex; gap:7px; margin-right:18px; flex:none; }
-  .tabbar-dots span{ width:10px; height:10px; border-radius:50%; display:block; }
-  .dot-red{ background:#f17b7b; }
-  .dot-yellow{ background:#f6c177; }
-  .dot-green{ background:#4fd6be; }
-  .tabs{ display:flex; gap:2px; flex:none; }
-  .tab{
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--text-dim);
-    padding: 11px 14px;
-    border-right: 1px solid var(--line-soft);
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-    transition: color .15s ease, border-color .15s ease;
-  }
-  .tab:hover{ color: var(--text); }
-  .tab.active{ color: var(--string); border-bottom-color: var(--string); }
+/* ── Scroll progress ── */
+.progress-track{position:fixed;top:var(--tab-h);left:0;right:0;height:2px;background:var(--line-soft);z-index:49;}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--string),var(--func),var(--keyword));transition:width .05s linear;}
 
-  .scroll-progress-track{
-    position: fixed;
-    top: 46px;
-    left:0; right:0;
-    height: 3px;
-    background: var(--line-soft);
-    z-index: 49;
-  }
-  .scroll-progress-bar{
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--string), var(--func), var(--keyword));
-  }
+/* ── Gutter ── */
+.gutter{
+  position:fixed;top:calc(var(--tab-h) + 2px);bottom:var(--bar-h);left:0;
+  width:var(--gutter-w);border-right:1px solid var(--line);
+  background:var(--bg-panel);font-family:var(--mono);font-size:10.5px;
+  color:var(--text-faint);text-align:right;padding:22px 8px 0 0;
+  line-height:25px;overflow:hidden;z-index:10;user-select:none;
+}
 
-  /* ---------- Layout / gutter ---------- */
-  main{
-    margin-left: 46px;
-  }
-  .gutter{
-    position: fixed;
-    top: 49px;
-    bottom: 44px;
-    left: 0;
-    width: 46px;
-    border-right: 1px solid var(--line);
-    background: var(--bg-panel);
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-faint);
-    text-align: right;
-    padding: 24px 10px 0 0;
-    line-height: 26px;
-    overflow: hidden;
-    z-index: 10;
-  }
+/* ── Main layout ── */
+main{margin-left:var(--gutter-w);}
+.section{
+  padding:96px 6vw 84px;max-width:960px;margin:0 auto;
+  border-bottom:1px solid var(--line-soft);
+}
+.section:last-of-type{border-bottom:none;}
+.section-label{
+  font-family:var(--mono);font-size:12px;color:var(--comment);
+  margin-bottom:8px;letter-spacing:.04em;
+}
+.section-title{
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(20px,2.8vw,28px);margin-bottom:40px;color:var(--text);
+}
+.section-title .muted{color:var(--text-dim);font-weight:400;}
 
-  .section{
-    padding: 100px 6vw 90px;
-    max-width: 980px;
-    margin: 0 auto;
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .section:last-of-type{ border-bottom:none; }
+/* ── Hero ── */
+.hero{
+  padding-top:120px;min-height:78vh;display:flex;align-items:center;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+.hero.loaded{opacity:1;transform:translateY(0);}
+.terminal-block{width:100%;}
+.prompt{font-family:var(--mono);font-size:13px;color:var(--text-dim);margin-bottom:12px;}
+h1.typewriter{
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(26px,5vw,54px);line-height:1.3;
+  margin-bottom:8px;color:var(--text);
+  overflow:visible;word-wrap:break-word;padding-bottom:.1em;
+}
+h1.typewriter .c1{color:var(--func);}
+h1.typewriter .c2{color:var(--keyword);}
+h1.typewriter .c3{color:var(--string);}
+.cursor-blink{
+  display:inline-block;width:.45ch;height:.85em;
+  vertical-align:-.1em;background:var(--string);
+  margin-left:2px;animation:blink 1s step-end infinite;
+  transition:opacity .6s ease;
+}
+.cursor-blink.done{animation:none;opacity:0;}
+@keyframes blink{50%{opacity:0;}}
+.hero-sub{
+  font-family:var(--mono);font-size:14px;color:var(--comment);
+  margin-bottom:12px;line-height:1.7;
+}
+.hero-sub .hi{color:var(--string);}
+.hero-tagline{
+  font-family:var(--mono);font-size:13px;color:var(--text-faint);
+  margin-bottom:34px;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  font-family:var(--mono);font-size:13px;padding:11px 18px;
+  border-radius:4px;display:inline-flex;align-items:center;gap:7px;
+  transition:transform .15s,background .15s,border-color .15s,color .15s;
+  white-space:nowrap;
+}
+.btn-primary{background:var(--string);color:#061013;font-weight:600;}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-ghost{border:1px solid var(--line);color:var(--text-dim);}
+.btn-ghost:hover{border-color:var(--func);color:var(--func);transform:translateY(-2px);}
 
-  .section-title{
-    font-family: var(--mono);
-    font-size: clamp(22px, 3vw, 30px);
-    font-weight: 600;
-    margin: 0 0 40px;
-    color: var(--text);
-  }
-  .section-title .muted{ color: var(--text-dim); font-weight:400; }
+/* ── About ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.about-bio{font-size:15px;color:var(--text);line-height:1.8;}
+.about-bio p{margin-bottom:14px;}
+.about-bio p:last-child{margin-bottom:0;}
+.about-bio .hi{color:var(--string);}
+.about-bio .lo{color:var(--func);}
+.about-meta{
+  background:var(--bg-panel);border:1px solid var(--line);
+  border-radius:8px;padding:22px;font-family:var(--mono);font-size:13px;
+}
+.about-meta-row{display:flex;flex-direction:column;gap:3px;margin-bottom:18px;}
+.about-meta-row:last-child{margin-bottom:0;}
+.meta-label{color:var(--keyword);font-size:12px;}
+.meta-val{color:var(--text);}
+.avail-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--string);margin-right:6px;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
-  /* ---------- Hero ---------- */
-  .hero{
-    padding-top: 130px;
-    min-height: 78vh;
-    display:flex;
-    align-items:center;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity .7s ease, transform .7s ease;
-  }
-  .hero.loaded{ opacity: 1; transform: translateY(0); }
-  .terminal-block{ width:100%; }
-  .prompt{
-    font-family: var(--mono);
-    font-size: 14px;
-    color: var(--text-dim);
-    margin: 0 0 10px;
-  }
-  .prompt::before{ content: ''; }
-  .prompt .accent{ color: var(--string); }
-  h1.typewriter{
-    font-family: var(--mono);
-    font-weight: 700;
-    font-size: clamp(28px, 5.4vw, 56px);
-    line-height: 1.35;
-    margin: 0 0 22px;
-    color: var(--text);
-    overflow: visible;
-    word-wrap: break-word;
-    padding-bottom: 0.15em; /* room for descenders so nothing clips */
-  }
-  h1.typewriter .accent{ color: var(--func); }
-  h1.typewriter .accent2{ color: var(--keyword); }
-  .cursor-blink{
-    display:inline-block;
-    width: .5ch;
-    height: 0.85em;
-    vertical-align: -0.12em;
-    background: var(--string);
-    margin-left: 3px;
-    animation: blink 1s step-end infinite;
-    transition: opacity .6s ease;
-  }
-  .cursor-blink.done{
-    animation: none;
-    opacity: 0;
-  }
-  @keyframes blink{ 50%{ opacity:0; } }
+/* ── Process ── */
+.process-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.process-step{
+  background:var(--bg-panel);border:1px solid var(--line);
+  border-radius:8px;padding:22px 20px;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .5s ease,transform .5s ease,border-color .2s;
+}
+.process-step.in-view{opacity:1;transform:translateY(0);}
+.process-step:hover{border-color:var(--func);}
+.step-num{
+  font-family:var(--mono);font-size:11px;color:var(--comment);
+  margin-bottom:10px;
+}
+.step-title{
+  font-family:var(--mono);font-size:15px;font-weight:600;
+  color:var(--string);margin-bottom:10px;
+}
+.step-desc{font-size:13.5px;color:var(--text-dim);line-height:1.7;}
 
-  .subtitle{
-    font-family: var(--mono);
-    font-size: 15px;
-    color: var(--comment);
-    margin: 0 0 36px;
-  }
-  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
-  .btn-primary, .btn-ghost{
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 12px 20px;
-    border-radius: 4px;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    transition: transform .15s ease, background .15s ease, border-color .15s ease;
-  }
-  .btn-primary{
-    background: var(--string);
-    color: #061013;
-    font-weight: 600;
-  }
-  .btn-primary:hover{ transform: translateY(-2px); }
-  .btn-ghost{
-    border: 1px solid var(--line);
-    color: var(--text);
-  }
-  .btn-ghost:hover{ border-color: var(--func); color: var(--func); transform: translateY(-2px); }
+/* ── Projects ── */
+.project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.project-card{
+  background:var(--bg-panel);border:1px solid var(--line);
+  border-radius:8px;overflow:hidden;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .5s ease,transform .5s ease,border-color .2s;
+  display:flex;flex-direction:column;
+}
+.project-card.in-view{opacity:1;transform:translateY(0);}
+.project-card:hover{border-color:var(--func);}
 
-  /* ---------- Projects ---------- */
-  .project-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 20px;
-  }
-  .project-card{
-    background: var(--bg-panel);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 22px;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity .5s ease, transform .5s ease, border-color .2s ease;
-  }
-  .project-card.in-view{ opacity:1; transform: translateY(0); }
-  .project-card:hover{ border-color: var(--func); }
+/* Browser mockup */
+.card-visual{aspect-ratio:16/10;position:relative;background:var(--bg);flex:none;}
+.browser-bar{
+  height:26px;background:var(--bg-panel-2);
+  display:flex;align-items:center;gap:5px;padding:0 10px;
+  border-bottom:1px solid var(--line);
+}
+.browser-bar .bd{width:7px;height:7px;border-radius:50%;background:var(--line);flex:none;}
+.browser-url{
+  flex:1;margin-left:6px;background:var(--bg);border-radius:3px;
+  font-family:var(--mono);font-size:10px;color:var(--text-faint);
+  padding:2px 8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.visual-body{
+  position:absolute;inset:26px 0 0 0;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--tint,var(--string)) 14%,transparent),transparent 68%);
+  transition:transform .4s ease;overflow:hidden;
+}
+.project-card:hover .visual-body{transform:scale(1.04);}
+.visual-placeholder{
+  font-family:var(--mono);font-size:11px;color:var(--text-faint);
+  text-align:center;padding:0 14px;
+}
+.visual-placeholder .glyph{font-size:26px;color:var(--tint,var(--string));display:block;margin-bottom:6px;opacity:.5;}
 
-  /* Mockup frame for showcasing UI/UX work. Swap visual-body's background-image
-     for a real screenshot (or drop an <img> in there) once you have one. */
-  .card-visual{
-    aspect-ratio: 16 / 10;
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 16px;
-    border: 1px solid var(--line);
-    background: var(--bg);
-    position: relative;
-  }
-  .card-visual .browser-bar{
-    height: 24px;
-    background: var(--bg-panel-2);
-    display:flex;
-    align-items:center;
-    gap:6px;
-    padding: 0 10px;
-    border-bottom: 1px solid var(--line);
-  }
-  .card-visual .browser-bar span{ width:7px; height:7px; border-radius:50%; background: var(--line); flex:none; }
-  .card-visual .browser-url{
-    flex:1;
-    margin-left: 6px;
-    background: var(--bg);
-    border-radius: 3px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-faint);
-    padding: 3px 8px;
-    overflow:hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .card-visual .visual-body{
-    position:absolute;
-    inset: 24px 0 0 0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: linear-gradient(135deg, color-mix(in srgb, var(--tint) 16%, transparent), transparent 70%);
-    background-size: cover;
-    background-position: center;
-    transition: transform .4s ease;
-  }
-  .project-card:hover .visual-body{ transform: scale(1.03); }
-  .visual-mark{
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-faint);
-    text-align:center;
-    padding: 0 16px;
-  }
-  .visual-mark .glyph{
-    font-size: 30px;
-    color: var(--tint);
-    display:block;
-    margin-bottom: 6px;
-  }
-  .card-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap: 10px;
-    margin-bottom: 12px;
-    font-family: var(--mono);
-  }
-  .card-head .key{ color: var(--string); font-size: 14px; }
-  .status{
-    font-size: 11px;
-    font-family: var(--mono);
-    padding: 3px 8px;
-    border-radius: 10px;
-    white-space: nowrap;
-    border: 1px solid var(--line);
-  }
-  .status-completed{ color: var(--string); border-color: rgba(79,214,190,.35); }
-  .status-in_progress{ color: var(--number); border-color: rgba(246,165,96,.35); }
-  .status-design_complete{ color: var(--func); border-color: rgba(122,162,247,.35); }
-  .status-planning{ color: var(--keyword); border-color: rgba(199,146,234,.35); }
-  .status-concept{ color: var(--text-dim); border-color: var(--line); }
+.card-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;}
+.card-key{font-family:var(--mono);font-size:12.5px;color:var(--string);}
+.status{
+  font-size:10.5px;font-family:var(--mono);padding:2px 8px;
+  border-radius:10px;white-space:nowrap;border:1px solid var(--line);flex:none;
+}
+.s-done{color:var(--string);border-color:rgba(79,214,190,.3);}
+.s-wip{color:var(--number);border-color:rgba(246,165,96,.3);}
+.s-design{color:var(--func);border-color:rgba(122,162,247,.3);}
+.s-plan{color:var(--keyword);border-color:rgba(199,146,234,.3);}
+.s-concept{color:var(--text-dim);border-color:var(--line);}
 
-  .card-desc{ font-size: 14.5px; color: var(--text); margin: 0 0 14px; }
-  .card-meta{ list-style:none; padding:0; margin: 0 0 16px; font-family: var(--mono); font-size: 12.5px; color: var(--text-dim); }
-  .card-meta li{ margin-bottom: 5px; }
-  .meta-key{ color: var(--keyword); }
-  .card-link{
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--func);
-    border-bottom: 1px solid transparent;
-    transition: border-color .15s ease;
-  }
-  .card-link:hover{ border-color: var(--func); }
+/* story block */
+.card-story{margin-bottom:14px;}
+.story-row{display:flex;gap:8px;margin-bottom:7px;font-size:13.5px;}
+.story-key{font-family:var(--mono);font-size:11px;color:var(--comment);width:60px;flex:none;padding-top:2px;}
+.story-val{color:var(--text);line-height:1.6;flex:1;}
 
-  /* ---------- Stack ---------- */
-  .stack-groups{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; }
-  .group-label{
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--comment);
-    margin: 0 0 14px;
-  }
-  .group-label .kw{ color: var(--keyword); }
-  .stack-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
-  .stack-list li{
-    font-family: var(--mono);
-    font-size: 14px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    color: var(--text);
-    transition: transform .15s ease, color .15s ease;
-  }
-  .stack-list li:hover{ transform: translateX(4px); color: var(--string); }
-  .stack-dot{ width:6px; height:6px; border-radius:50%; background: var(--func); flex:none; }
+.card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.tag{
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);
+  background:var(--bg);border:1px solid var(--line);
+  border-radius:3px;padding:2px 7px;
+}
+.card-link{
+  font-family:var(--mono);font-size:12.5px;color:var(--func);
+  border-bottom:1px solid transparent;transition:border-color .15s;
+  margin-top:auto;
+}
+.card-link:hover{border-color:var(--func);}
 
-  /* ---------- Contact ---------- */
-  .contact-terminal{ background: var(--bg-panel); border:1px solid var(--line); border-radius:8px; padding: 28px 28px 24px; }
-  .social-list{ list-style:none; margin: 14px 0 18px; padding:0; display:flex; flex-direction:column; gap:10px; }
-  .social-list a{
-    font-family: var(--mono);
-    font-size: 14.5px;
-    color: var(--func);
-    border-bottom: 1px solid transparent;
-  }
-  .social-list a:hover{ border-color: var(--func); }
-  .social-list .arrow{ color: var(--text-dim); margin-right: 8px; }
-  .contact-note{ font-size: 14px; color: var(--text-dim); margin-top: 18px; max-width: 520px; }
+/* ── Stack ── */
+.stack-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;}
+.group-label{font-family:var(--mono);font-size:12px;color:var(--comment);margin-bottom:12px;}
+.group-label .kw{color:var(--keyword);}
+.stack-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.stack-list li{
+  font-family:var(--mono);font-size:13.5px;display:flex;align-items:center;gap:10px;
+  color:var(--text);transition:transform .15s,color .15s;
+}
+.stack-list li:hover{transform:translateX(4px);color:var(--string);}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--func);flex:none;}
 
-  /* ---------- Status bar ---------- */
-  .statusbar{
-    position: fixed;
-    bottom:0; left:0; right:0;
-    height: 28px;
-    background: var(--func);
-    color: #0b0e14;
-    font-family: var(--mono);
-    font-size: 12px;
-    display:flex;
-    align-items:center;
-    gap: 22px;
-    padding: 0 16px;
-    z-index: 50;
-    overflow-x:auto;
-    white-space: nowrap;
-  }
-  .statusbar span{ display:flex; align-items:center; gap:6px; }
-  .dot-live{ width:7px; height:7px; border-radius:50%; background:#0b0e14; }
+/* ── Contact ── */
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.contact-terminal{
+  background:var(--bg-panel);border:1px solid var(--line);
+  border-radius:8px;padding:24px;
+}
+.contact-prompt{font-family:var(--mono);font-size:13px;color:var(--text-dim);margin-bottom:16px;}
+.social-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:20px;}
+.social-list a{font-family:var(--mono);font-size:14px;color:var(--func);border-bottom:1px solid transparent;transition:border-color .15s;}
+.social-list a:hover{border-color:var(--func);}
+.social-list .arr{color:var(--text-faint);margin-right:8px;}
+.contact-note{font-family:var(--mono);font-size:12px;color:var(--comment);line-height:1.7;margin-top:4px;}
+.contact-note .hi{color:var(--string);}
 
-  @media (max-width: 720px){
-    main{ margin-left: 0; }
-    .gutter{ display:none; }
-    .section{ padding: 70px 6vw 60px; }
-    .hero{ padding-top: 90px; }
-  }
+.contact-cta{display:flex;flex-direction:column;gap:16px;}
+.cta-card{
+  background:var(--bg-panel);border:1px solid var(--line);
+  border-radius:8px;padding:22px;
+}
+.cta-card h3{font-family:var(--mono);font-size:14px;color:var(--text);margin-bottom:8px;}
+.cta-card p{font-size:13.5px;color:var(--text-dim);line-height:1.7;margin-bottom:16px;}
+.cta-card .btn{width:100%;justify-content:center;}
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
-  }
+/* ── Status bar ── */
+.statusbar{
+  position:fixed;bottom:0;left:0;right:0;height:var(--bar-h);
+  background:var(--func);color:#0b0e14;
+  font-family:var(--mono);font-size:11.5px;
+  display:flex;align-items:center;gap:20px;padding:0 14px;
+  z-index:50;overflow-x:auto;scrollbar-width:none;white-space:nowrap;
+}
+.statusbar::-webkit-scrollbar{display:none;}
+.statusbar span{display:flex;align-items:center;gap:5px;}
+.dot-live{width:6px;height:6px;border-radius:50%;background:#0b0e14;animation:pulse 2s ease-in-out infinite;}
+
+/* ── Reveal utility ── */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease;}
+.reveal.in-view{opacity:1;transform:translateY(0);}
+
+/* ── Mobile responsiveness ── */
+@media(max-width:768px){
+  main{margin-left:0;}
+  .gutter{display:none;}
+  .section{padding:70px 5vw 60px;}
+  .hero{padding-top:84px;min-height:auto;}
+  .about-grid{grid-template-columns:1fr;}
+  .process-steps{grid-template-columns:1fr;}
+  .project-grid{grid-template-columns:1fr;}
+  .stack-groups{grid-template-columns:1fr 1fr;}
+  .contact-wrap{grid-template-columns:1fr;}
+  .tab{padding:10px 10px;font-size:11.5px;}
+  .tabbar-dots{display:none;}
+  h1.typewriter{font-size:clamp(24px,7vw,42px);}
+}
+@media(max-width:480px){
+  .stack-groups{grid-template-columns:1fr;}
+  .hero-actions{flex-direction:column;}
+  .btn{justify-content:center;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+}
 </style>
 </head>
 <body>
 
-<nav class="tabbar" aria-label="Section navigation">
-  <div class="tabbar-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+<nav class="tabbar" aria-label="Site sections">
+  <div class="tabbar-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
   <div class="tabs">
-    <a href="#home" class="tab active" data-section="home">home.tsx</a>
-    <a href="#projects" class="tab" data-section="projects">projects.json</a>
-    <a href="#stack" class="tab" data-section="stack">stack.config</a>
-    <a href="#contact" class="tab" data-section="contact">contact.sh</a>
+    <a href="#home"     class="tab active" data-sec="home">home.tsx</a>
+    <a href="#about"    class="tab"        data-sec="about">about.md</a>
+    <a href="#process"  class="tab"        data-sec="process">process.sh</a>
+    <a href="#projects" class="tab"        data-sec="projects">projects.json</a>
+    <a href="#stack"    class="tab"        data-sec="stack">stack.config</a>
+    <a href="#contact"  class="tab"        data-sec="contact">contact.sh</a>
   </div>
 </nav>
-<div class="scroll-progress-track"><div class="scroll-progress-bar" id="scrollProgress"></div></div>
-
+<div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
 <div class="gutter" id="gutter" aria-hidden="true"></div>
 
 <main>
 
+  <!-- ── HERO ── -->
   <section id="home" class="section hero">
     <div class="terminal-block">
       <p class="prompt">nat3@portfolio:~$ whoami</p>
-      <h1 class="typewriter" id="typewriter" aria-label="nat3.Visuals — designer and developer who designs in Figma and ships in code"></h1>
-      <p class="subtitle">// based remotely · open to local &amp; international clients · status: <span style="color:var(--string)">available</span></p>
+      <h1 class="typewriter" id="typewriter" aria-label="nat3_Visuals — designer who codes. End to end. No handoff needed."></h1>
+      <p class="hero-sub">
+        <span class="hi">// designer-developer</span> based in Nigeria<br>
+        I take ideas from Figma to fully working products — <span class="hi">no handoff needed.</span>
+      </p>
+      <p class="hero-tagline">// open to local &amp; international clients · status: <span style="color:var(--string)">● available</span></p>
       <div class="hero-actions">
-        <a href="#projects" class="btn-primary">view_projects()</a>
-        <a href="#contact" class="btn-ghost">get_in_touch()</a>
+        <a href="#projects" class="btn btn-primary">view_projects()</a>
+        <a href="#contact"  class="btn btn-ghost">get_in_touch()</a>
+        <a href="#process"  class="btn btn-ghost">how_i_work()</a>
       </div>
     </div>
   </section>
 
+  <!-- ── ABOUT ── -->
+  <section id="about" class="section">
+    <p class="section-label">// about.md</p>
+    <h2 class="section-title">nat3_Visuals<span class="muted"> — the person behind the work</span></h2>
+    <div class="about-grid">
+      <div class="about-bio reveal">
+        <p>I'm a <span class="hi">designer-developer</span> based in Nigeria — one of those people who got tired of the gap between how things are designed and how they actually get built.</p>
+        <p>So I learned both. I design in <span class="lo">Figma</span>, prototype with <span class="lo">Figma Make</span>, and build with <span class="lo">HTML, CSS, JavaScript and React</span>. When you work with me, you get one person who owns the entire process — from the first wireframe to the deployed product.</p>
+        <p>I work with small businesses, startups, and founders who need someone they can trust to get it done right without having to manage a team of people or explain things twice.</p>
+        <p>Professional, reliable, and genuinely easy to work with — that's the standard I hold myself to on every project.</p>
+      </div>
+      <div class="about-meta reveal">
+        <div class="about-meta-row">
+          <span class="meta-label">const location =</span>
+          <span class="meta-val">"Nigeria 🇳🇬"</span>
+        </div>
+        <div class="about-meta-row">
+          <span class="meta-label">const role =</span>
+          <span class="meta-val">"Designer + Developer"</span>
+        </div>
+        <div class="about-meta-row">
+          <span class="meta-label">const availability =</span>
+          <span class="meta-val"><span class="avail-dot"></span>open to work</span>
+        </div>
+        <div class="about-meta-row">
+          <span class="meta-label">const clients =</span>
+          <span class="meta-val">["local", "international"]</span>
+        </div>
+        <div class="about-meta-row">
+          <span class="meta-label">const responseTime =</span>
+          <span class="meta-val">"within 24hrs"</span>
+        </div>
+        <div class="about-meta-row">
+          <span class="meta-label">const workStyle =</span>
+          <span class="meta-val">"async-friendly, clear comms"</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ── -->
+  <section id="process" class="section">
+    <p class="section-label">// how I work</p>
+    <h2 class="section-title">process<span class="muted">.sh</span></h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <p class="step-num">// 01</p>
+        <p class="step-title">discover()</p>
+        <p class="step-desc">Before I touch Figma, I ask the right questions. What's the actual problem? Who's the user? What does success look like? Good design starts with understanding, not aesthetics.</p>
+      </div>
+      <div class="process-step">
+        <p class="step-num">// 02</p>
+        <p class="step-title">design()</p>
+        <p class="step-desc">Wireframes first, then high-fidelity. I loop you in at every stage so nothing is a surprise at the end. You'll see the thinking behind every decision, not just the output.</p>
+      </div>
+      <div class="process-step">
+        <p class="step-num">// 03</p>
+        <p class="step-title">build()</p>
+        <p class="step-desc">I write and ship clean, fast, production-ready code. No handoff to another dev, no translation loss — what we designed is what gets built. Deployed, tested, and yours.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
   <section id="projects" class="section">
+    <p class="section-label">// selected work</p>
     <h2 class="section-title">projects<span class="muted">.json</span></h2>
     <div class="project-grid">
 
       <article class="project-card">
-        <div class="card-visual" style="--tint: var(--string);">
-          <div class="browser-bar"><span></span><span></span><span></span><div class="browser-url">signageandbranding.co</div></div>
-          <div class="visual-body"><div class="visual-mark"><span class="glyph">▣</span>add screenshot</div></div>
+        <div class="card-visual" style="--tint:var(--string);">
+          <div class="browser-bar"><span class="bd"></span><span class="bd"></span><span class="bd"></span><div class="browser-url">signageandbranding.co</div></div>
+          <div class="visual-body"><div class="visual-placeholder"><span class="glyph">▣</span>add screenshot</div></div>
         </div>
-        <div class="card-head">
-          <span class="key">"signage_and_branding_co"</span>
-          <span class="status status-completed">● completed</span>
+        <div class="card-body">
+          <div class="card-head">
+            <span class="card-key">"signage_&_branding_co"</span>
+            <span class="status s-done">● completed</span>
+          </div>
+          <div class="card-story">
+            <div class="story-row"><span class="story-key">// problem</span><span class="story-val">A signage and branding business with great work but no online presence — they were sending prospects to a chaotic Instagram feed.</span></div>
+            <div class="story-row"><span class="story-key">// what I did</span><span class="story-val">Designed and built a fast, brand-aligned portfolio site from scratch — clean gallery, service breakdown, and direct contact path.</span></div>
+            <div class="story-row"><span class="story-key">// outcome</span><span class="story-val">Client now sends prospects a link instead of a feed scroll. First impression finally matches the quality of their work.</span></div>
+          </div>
+          <div class="card-tags"><span class="tag">Figma</span><span class="tag">HTML/CSS/JS</span><span class="tag">design+build</span></div>
+          <a href="#" class="card-link">view_case_study →</a>
         </div>
-        <p class="card-desc">A full portfolio website for a signage &amp; branding business that previously relied on scattered social posts to show their work. Gives them a permanent, organized home for their portfolio and a direct path for inquiries.</p>
-        <ul class="card-meta">
-          <li><span class="meta-key">role:</span> design + development</li>
-          <li><span class="meta-key">stack:</span> Figma → HTML/CSS/JS</li>
-        </ul>
-        <a href="#" class="card-link">view_case_study →</a>
       </article>
 
       <article class="project-card">
-        <div class="card-visual" style="--tint: var(--func);">
-          <div class="browser-bar"><span></span><span></span><span></span><div class="browser-url">sales-inventory.app</div></div>
-          <div class="visual-body"><div class="visual-mark"><span class="glyph">▣</span>add screenshot</div></div>
+        <div class="card-visual" style="--tint:var(--func);">
+          <div class="browser-bar"><span class="bd"></span><span class="bd"></span><span class="bd"></span><div class="browser-url">sales-inventory.app</div></div>
+          <div class="visual-body"><div class="visual-placeholder"><span class="glyph">▣</span>add screenshot</div></div>
         </div>
-        <div class="card-head">
-          <span class="key">"sales_inventory_app"</span>
-          <span class="status status-design_complete">● design complete</span>
+        <div class="card-body">
+          <div class="card-head">
+            <span class="card-key">"sales_inventory_app"</span>
+            <span class="status s-design">● design complete</span>
+          </div>
+          <div class="card-story">
+            <div class="story-row"><span class="story-key">// problem</span><span class="story-val">SMEs in Nigeria tracking stock and sales with physical notebooks — slow, error-prone, and impossible to audit.</span></div>
+            <div class="story-row"><span class="story-key">// what I did</span><span class="story-val">Designed a mobile-first app UI in Figma covering stock management, sales logging, and simple reporting in one clean flow.</span></div>
+            <div class="story-row"><span class="story-key">// outcome</span><span class="story-val">Three previously manual processes collapsed into one app. Design system is dev-ready for handoff.</span></div>
+          </div>
+          <div class="card-tags"><span class="tag">Figma</span><span class="tag">Figma Make</span><span class="tag">product design</span></div>
+          <a href="#" class="card-link">view_case_study →</a>
         </div>
-        <p class="card-desc">UI/UX for a sales &amp; inventory app built for SMEs in Nigeria, replacing pen-and-paper bookkeeping with a simple mobile-first system for tracking stock and sales.</p>
-        <ul class="card-meta">
-          <li><span class="meta-key">role:</span> product design</li>
-          <li><span class="meta-key">stack:</span> Figma, Figma Make</li>
-        </ul>
-        <a href="#" class="card-link">view_case_study →</a>
       </article>
 
       <article class="project-card">
-        <div class="card-visual" style="--tint: var(--keyword);">
-          <div class="browser-bar"><span></span><span></span><span></span><div class="browser-url">microstore.shop</div></div>
-          <div class="visual-body"><div class="visual-mark"><span class="glyph">▣</span>add screenshot</div></div>
+        <div class="card-visual" style="--tint:var(--keyword);">
+          <div class="browser-bar"><span class="bd"></span><span class="bd"></span><span class="bd"></span><div class="browser-url">microstore.shop</div></div>
+          <div class="visual-body"><div class="visual-placeholder"><span class="glyph">▣</span>coming soon</div></div>
         </div>
-        <div class="card-head">
-          <span class="key">"micro_store"</span>
-          <span class="status status-planning">● planning</span>
+        <div class="card-body">
+          <div class="card-head">
+            <span class="card-key">"micro_store"</span>
+            <span class="status s-plan">● planning</span>
+          </div>
+          <div class="card-story">
+            <div class="story-row"><span class="story-key">// problem</span><span class="story-key"></span><span class="story-val">Social media vendors lose sales because customers have to DM and wait for a reply before they can even buy anything.</span></div>
+            <div class="story-row"><span class="story-key">// what I did</span><span class="story-val">Designing a lightweight vendor dashboard + storefront so customers can browse and buy directly — no DMs, no waiting.</span></div>
+            <div class="story-row"><span class="story-key">// outcome</span><span class="story-val">In progress — aiming to remove the DM bottleneck entirely and give vendors a real conversion path.</span></div>
+          </div>
+          <div class="card-tags"><span class="tag">React</span><span class="tag">Figma</span><span class="tag">design+build</span></div>
+          <a href="#" class="card-link">view_details →</a>
         </div>
-        <p class="card-desc">A lightweight storefront for social-media vendors to list and manage products, letting customers check out directly instead of waiting on DM replies.</p>
-        <ul class="card-meta">
-          <li><span class="meta-key">role:</span> design + development</li>
-          <li><span class="meta-key">stack:</span> Figma, React</li>
-        </ul>
-        <a href="#" class="card-link">view_details →</a>
       </article>
 
       <article class="project-card">
-        <div class="card-visual" style="--tint: var(--number);">
-          <div class="browser-bar"><span></span><span></span><span></span><div class="browser-url">hms.internal</div></div>
-          <div class="visual-body"><div class="visual-mark"><span class="glyph">▣</span>add screenshot</div></div>
+        <div class="card-visual" style="--tint:var(--number);">
+          <div class="browser-bar"><span class="bd"></span><span class="bd"></span><span class="bd"></span><div class="browser-url">hms.internal</div></div>
+          <div class="visual-body"><div class="visual-placeholder"><span class="glyph">▣</span>in progress</div></div>
         </div>
-        <div class="card-head">
-          <span class="key">"hospital_management_system"</span>
-          <span class="status status-in_progress">● in progress</span>
+        <div class="card-body">
+          <div class="card-head">
+            <span class="card-key">"hospital_mgmt_system"</span>
+            <span class="status s-wip">● in progress</span>
+          </div>
+          <div class="card-story">
+            <div class="story-row"><span class="story-key">// problem</span><span class="story-val">A hospital running entirely on paper files — records slow to find, easy to lose, impossible to share between departments.</span></div>
+            <div class="story-row"><span class="story-key">// what I did</span><span class="story-val">Designing and building a role-based system covering patient records, scheduling, and staff access controls.</span></div>
+            <div class="story-row"><span class="story-key">// outcome</span><span class="story-val">Client project, currently live in development — transitioning the hospital from files to a searchable online database.</span></div>
+          </div>
+          <div class="card-tags"><span class="tag">React</span><span class="tag">Figma</span><span class="tag">design+build</span></div>
+          <a href="#" class="card-link">view_details →</a>
         </div>
-        <p class="card-desc">A records system moving a hospital off paper files and onto a searchable online database, covering patient records, scheduling, and staff access.</p>
-        <ul class="card-meta">
-          <li><span class="meta-key">role:</span> design + development</li>
-          <li><span class="meta-key">stack:</span> Figma, React</li>
-        </ul>
-        <a href="#" class="card-link">view_details →</a>
       </article>
 
       <article class="project-card">
-        <div class="card-visual" style="--tint: var(--danger);">
-          <div class="browser-bar"><span></span><span></span><span></span><div class="browser-url">boutiquehotel.vr</div></div>
-          <div class="visual-body"><div class="visual-mark"><span class="glyph">▣</span>add screenshot</div></div>
+        <div class="card-visual" style="--tint:var(--danger);">
+          <div class="browser-bar"><span class="bd"></span><span class="bd"></span><span class="bd"></span><div class="browser-url">boutiquehotel.vr</div></div>
+          <div class="visual-body"><div class="visual-placeholder"><span class="glyph">▣</span>personal project</div></div>
         </div>
-        <div class="card-head">
-          <span class="key">"boutique_hotel_vr_tours"</span>
-          <span class="status status-concept">● personal project</span>
+        <div class="card-body">
+          <div class="card-head">
+            <span class="card-key">"hotel_vr_tours"</span>
+            <span class="status s-concept">● personal project</span>
+          </div>
+          <div class="card-story">
+            <div class="story-row"><span class="story-key">// problem</span><span class="story-val">Hotel booking pages rely on static photos that can't communicate the feel of a room or space.</span></div>
+            <div class="story-row"><span class="story-key">// what I did</span><span class="story-val">Built a concept hotel website with immersive VR room tours, exploring how spatial experiences could replace photo galleries.</span></div>
+            <div class="story-row"><span class="story-key">// outcome</span><span class="story-val">Personal exploration of hospitality UX — proof of concept for immersive booking experiences on the web.</span></div>
+          </div>
+          <div class="card-tags"><span class="tag">Figma</span><span class="tag">HTML/CSS/JS</span><span class="tag">concept</span></div>
+          <a href="#" class="card-link">view_details →</a>
         </div>
-        <p class="card-desc">A concept hotel website with VR room tours, exploring how immersive previews can replace static photo galleries for hospitality bookings.</p>
-        <ul class="card-meta">
-          <li><span class="meta-key">role:</span> design + development</li>
-          <li><span class="meta-key">stack:</span> Figma, HTML/CSS/JS</li>
-        </ul>
-        <a href="#" class="card-link">view_details →</a>
       </article>
 
     </div>
   </section>
 
+  <!-- ── STACK ── -->
   <section id="stack" class="section">
+    <p class="section-label">// tools I use</p>
     <h2 class="section-title">stack<span class="muted">.config</span></h2>
     <div class="stack-groups">
-      <div class="stack-group">
-        <p class="group-label"><span class="kw">import</span> design <span class="kw">from</span></p>
+      <div class="reveal">
+        <p class="group-label"><span class="kw">import</span> design <span class="kw">from</span> "@nat3"</p>
         <ul class="stack-list">
-          <li><span class="stack-dot"></span>Figma</li>
-          <li><span class="stack-dot"></span>Figma Make</li>
+          <li><span class="sdot"></span>Figma</li>
+          <li><span class="sdot"></span>Figma Make</li>
         </ul>
       </div>
-      <div class="stack-group">
-        <p class="group-label"><span class="kw">import</span> frontend <span class="kw">from</span></p>
+      <div class="reveal">
+        <p class="group-label"><span class="kw">import</span> frontend <span class="kw">from</span> "@nat3"</p>
         <ul class="stack-list">
-          <li><span class="stack-dot"></span>HTML5 / CSS3</li>
-          <li><span class="stack-dot"></span>JavaScript</li>
-          <li><span class="stack-dot"></span>React</li>
+          <li><span class="sdot"></span>HTML5 / CSS3</li>
+          <li><span class="sdot"></span>JavaScript</li>
+          <li><span class="sdot"></span>React</li>
         </ul>
       </div>
-      <div class="stack-group">
-        <p class="group-label"><span class="kw">import</span> tooling <span class="kw">from</span></p>
+      <div class="reveal">
+        <p class="group-label"><span class="kw">import</span> tooling <span class="kw">from</span> "@nat3"</p>
         <ul class="stack-list">
-          <li><span class="stack-dot"></span>Git / GitHub</li>
-          <li><span class="stack-dot"></span>Vercel</li>
-          <li><span class="stack-dot"></span>AI-assisted dev workflow</li>
+          <li><span class="sdot"></span>Git / GitHub</li>
+          <li><span class="sdot"></span>Vercel / Netlify</li>
+          <li><span class="sdot"></span>AI-assisted workflow</li>
         </ul>
       </div>
     </div>
   </section>
 
+  <!-- ── CONTACT ── -->
   <section id="contact" class="section">
+    <p class="section-label">// let's work together</p>
     <h2 class="section-title">contact<span class="muted">.sh</span></h2>
-    <div class="contact-terminal">
-      <p class="prompt">nat3@portfolio:~$ open --socials</p>
-      <ul class="social-list">
-        <li><a href="https://github.com/n4te-source" target="_blank" rel="noopener"><span class="arrow">→</span>github/n4te-source</a></li>
-        <li><a href="https://www.instagram.com/nat3.visuals/" target="_blank" rel="noopener"><span class="arrow">→</span>instagram/nat3.visuals</a></li>
-        <li><a href="https://x.com/nat3visuals" target="_blank" rel="noopener"><span class="arrow">→</span>x/nat3visuals</a></li>
-      </ul>
-      <p class="prompt">nat3@portfolio:~$ <span class="cursor-blink">&nbsp;</span></p>
-      <p class="contact-note">// open to freelance and full-time work, local and international. Replace this terminal block with a real contact form or mailto link once you wire up email.</p>
+    <div class="contact-wrap">
+
+      <div class="contact-terminal reveal">
+        <p class="contact-prompt">nat3@portfolio:~$ open --socials</p>
+        <ul class="social-list">
+          <li><a href="https://github.com/n4te-source"           target="_blank" rel="noopener"><span class="arr">→</span>github / n4te-source</a></li>
+          <li><a href="https://www.instagram.com/nat3.visuals/"  target="_blank" rel="noopener"><span class="arr">→</span>instagram / nat3.visuals</a></li>
+          <li><a href="https://x.com/nat3visuals"                target="_blank" rel="noopener"><span class="arr">→</span>x / nat3visuals</a></li>
+        </ul>
+        <p class="contact-note">
+          // typically responds within <span class="hi">24 hours</span><br>
+          // open to freelance — local &amp; international<br>
+          // async-friendly, clear on timelines and scope
+        </p>
+      </div>
+
+      <div class="contact-cta reveal">
+        <div class="cta-card">
+          <h3>start_project()</h3>
+          <p>Have a product to build or a site that needs work? Tell me what you're building and I'll tell you how I can help.</p>
+          <a href="mailto:your@email.com" class="btn btn-primary">send_message →</a>
+        </div>
+        <div class="cta-card">
+          <h3>quick_question()</h3>
+          <p>Not sure if I'm the right fit? Reach out on any of the socials — a quick DM is fine. I don't bite.</p>
+          <a href="https://www.instagram.com/nat3.visuals/" target="_blank" rel="noopener" class="btn btn-ghost">DM on Instagram →</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -556,153 +592,112 @@
 
 <footer class="statusbar" aria-hidden="true">
   <span><span class="dot-live"></span>main</span>
-  <span id="status-section">home.tsx</span>
+  <span id="statusSection">home.tsx</span>
+  <span>Nigeria 🇳🇬</span>
   <span>● available for work</span>
-  <span id="status-pos">Ln 1, Col 1</span>
+  <span id="statusPos">Ln 1, Col 1</span>
 </footer>
 
 <script>
-  // ---- Typewriter hero ----
-  (function(){
-    var el = document.getElementById('typewriter');
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var parts = [
-      { text: 'nat3_Visuals', cls: 'accent' },
-      { text: ' — ', cls: '' },
-      { text: 'designer', cls: 'accent2' },
-      { text: ' who ', cls: '' },
-      { text: 'codes', cls: 'accent' },
-      { text: '.', cls: '' }
-    ];
+(function(){
+  /* ── Typewriter ── */
+  var el = document.getElementById('typewriter');
+  var reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var parts = [
+    {t:'nat3_Visuals',c:'c1'},{t:' — ',c:''},{t:'designer',c:'c2'},
+    {t:' who ',c:''},{t:'codes',c:'c3'},{t:'.',c:''}
+  ];
+  var queue = [];
+  parts.forEach(function(p){ for(var k=0;k<p.t.length;k++) queue.push({ch:p.t[k],cls:p.c}); });
 
-    // Flatten into a single character queue so typing never jumps or re-measures mid-word.
-    var queue = [];
-    parts.forEach(function(p){
-      for(var k = 0; k < p.text.length; k++){ queue.push({ ch: p.text[k], cls: p.cls }); }
-    });
-
-    if(reduced){
-      el.innerHTML = parts.map(function(p){ return p.cls ? '<span class="'+p.cls+'">'+p.text+'</span>' : p.text; }).join('');
-      return;
-    }
-
+  if(reduced){
+    el.innerHTML = parts.map(function(p){ return p.c?'<span class="'+p.c+'">'+p.t+'</span>':p.t; }).join('');
+  } else {
     var cursor = document.createElement('span');
-    cursor.className = 'cursor-blink';
-    cursor.innerHTML = '&nbsp;';
+    cursor.className = 'cursor-blink'; cursor.innerHTML = '&nbsp;';
     el.appendChild(cursor);
-
-    var charIndex = 0;
-    var currentCls = null;
-    var currentSpan = null;
-
+    var ci=0, curCls=null, curSpan=null;
     function step(){
-      if(charIndex >= queue.length){
-        // Finished: hold a beat, then fade the cursor out cleanly instead of leaving it
-        // blinking abruptly right after the final character.
-        setTimeout(function(){ cursor.classList.add('done'); }, 700);
-        return;
+      if(ci>=queue.length){ setTimeout(function(){ cursor.classList.add('done'); },800); return; }
+      var item = queue[ci];
+      if(item.cls!==curCls || !curSpan){
+        curSpan = document.createElement('span');
+        if(item.cls) curSpan.className = item.cls;
+        el.insertBefore(curSpan, cursor);
+        curCls = item.cls;
       }
-      var item = queue[charIndex];
-      if(item.cls !== currentCls || !currentSpan){
-        currentSpan = document.createElement('span');
-        if(item.cls) currentSpan.className = item.cls;
-        el.insertBefore(currentSpan, cursor);
-        currentCls = item.cls;
-      }
-      currentSpan.textContent += item.ch;
-      charIndex++;
-      var delay = item.ch === ' ' ? 18 : 30;
-      setTimeout(step, delay);
+      curSpan.textContent += item.ch; ci++;
+      setTimeout(step, item.ch===' '?16:28);
     }
     step();
-  })();
+  }
 
-  // ---- Hero entrance ----
+  /* ── Hero entrance ── */
   window.addEventListener('load', function(){
-    requestAnimationFrame(function(){
-      document.querySelector('.hero').classList.add('loaded');
-    });
+    requestAnimationFrame(function(){ document.querySelector('.hero').classList.add('loaded'); });
   });
 
-  // ---- Scroll progress bar ----
-  (function(){
-    var bar = document.getElementById('scrollProgress');
-    if(!bar) return;
-    function update(){
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
-      bar.style.width = pct + '%';
-    }
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  })();
-
-  // ---- Gutter line numbers ----
-  function buildGutter(){
-    var gutter = document.getElementById('gutter');
-    if(!gutter) return;
-    var lineHeight = 26;
-    var count = Math.ceil((document.documentElement.scrollHeight) / lineHeight) + 5;
-    var html = '';
-    for(var n = 1; n <= count; n++){ html += n + '<br>'; }
-    gutter.innerHTML = html;
+  /* ── Scroll progress ── */
+  var bar = document.getElementById('progressBar');
+  function updateProgress(){
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    if(bar) bar.style.width = (max>0 ? (window.scrollY/max)*100 : 0)+'%';
   }
-  window.addEventListener('load', buildGutter);
-  window.addEventListener('resize', buildGutter);
+  window.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
 
-  // ---- Active tab + status bar tracking ----
-  (function(){
-    var sections = document.querySelectorAll('.section');
-    var tabs = document.querySelectorAll('.tab');
-    var statusSection = document.getElementById('status-section');
-    var fileNames = { home: 'home.tsx', projects: 'projects.json', stack: 'stack.config', contact: 'contact.sh' };
+  /* ── Gutter ── */
+  function buildGutter(){
+    var g = document.getElementById('gutter'); if(!g) return;
+    var count = Math.ceil(document.documentElement.scrollHeight/25)+10;
+    var html=''; for(var n=1;n<=count;n++) html+=n+'<br>';
+    g.innerHTML=html;
+  }
+  window.addEventListener('load',buildGutter);
+  window.addEventListener('resize',buildGutter);
 
-    var observer = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          var id = entry.target.id;
-          tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.section === id); });
-          if(statusSection) statusSection.textContent = fileNames[id] || id;
-        }
-      });
-    }, { threshold: 0.4 });
+  /* ── Tab active + status section ── */
+  var fileMap = {home:'home.tsx',about:'about.md',process:'process.sh',projects:'projects.json',stack:'stack.config',contact:'contact.sh'};
+  var secEl = document.getElementById('statusSection');
+  var allTabs = document.querySelectorAll('.tab');
+  var sectionObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var id=e.target.id;
+        allTabs.forEach(function(t){ t.classList.toggle('active', t.dataset.sec===id); });
+        if(secEl) secEl.textContent = fileMap[id]||id;
+      }
+    });
+  },{threshold:0.35});
+  document.querySelectorAll('.section').forEach(function(s){ sectionObs.observe(s); });
 
-    sections.forEach(function(s){ observer.observe(s); });
-  })();
+  /* ── Status bar Ln/Col ── */
+  var posEl = document.getElementById('statusPos');
+  function updatePos(){
+    if(posEl) posEl.textContent='Ln '+(Math.max(1,Math.round(window.scrollY/22)+1))+', Col 1';
+  }
+  window.addEventListener('scroll',updatePos,{passive:true});
+  updatePos();
 
-  // ---- Status bar Ln/Col (decorative, tied to scroll) ----
-  (function(){
-    var posEl = document.getElementById('status-pos');
-    if(!posEl) return;
-    function update(){
-      var ln = Math.max(1, Math.round(window.scrollY / 22) + 1);
-      var col = Math.max(1, Math.round((window.scrollX || 1)) + 1);
-      posEl.textContent = 'Ln ' + ln + ', Col ' + col;
-    }
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  })();
+  /* ── Scroll reveal ── */
+  var revealObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry,i){
+      if(entry.isIntersecting){
+        var el=entry.target;
+        var delay = el.classList.contains('project-card') ? i*55 : 0;
+        setTimeout(function(){ el.classList.add('in-view'); }, delay);
+        revealObs.unobserve(el);
+      }
+    });
+  },{threshold:0.12});
 
-  // ---- Scroll reveal for project cards ----
-  (function(){
-    var cards = document.querySelectorAll('.project-card');
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduced){
-      cards.forEach(function(c){ c.classList.add('in-view'); });
-      return;
-    }
-    var observer = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry, idx){
-        if(entry.isIntersecting){
-          setTimeout(function(){ entry.target.classList.add('in-view'); }, idx * 60);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    cards.forEach(function(c){ observer.observe(c); });
-  })();
+  var reduced2 = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  document.querySelectorAll('.project-card,.process-step,.reveal').forEach(function(el){
+    if(reduced2){ el.classList.add('in-view'); }
+    else { revealObs.observe(el); }
+  });
+})();
 </script>
-
 </body>
 </html>
